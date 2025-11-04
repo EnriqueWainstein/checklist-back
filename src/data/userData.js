@@ -44,7 +44,10 @@ export async function registerUser({ username, email, password }) {
     const newUser = {
         username,
         email,
-        password: hashedPassword
+        password: hashedPassword,
+        role: "collaborator", // Rol por defecto para nuevos usuarios
+        createdAt: new Date(),
+        updatedAt: new Date()
     };
     const result = await db.collection("users").insertOne(newUser);
     return result;

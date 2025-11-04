@@ -49,6 +49,7 @@ export async function createChecklist(req, res) {
     try {
         const checklistInfo = req.body;
         const createdBy = req.user.email; // Viene del middleware de autenticación
+        const userRole = req.user.role; // Rol del usuario disponible desde el JWT
         
         const result = await checklistService.createChecklist(checklistInfo, createdBy);
         

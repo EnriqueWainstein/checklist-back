@@ -1,0 +1,894 @@
+{
+	"info": {
+		"_postman_id": "checklist-backend-api",
+		"name": "Checklist Backend API",
+		"description": "Colección completa para probar el backend del sistema de checklists con datos Oil & Gas",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwt_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "jwt_token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "🔐 Authentication",
+			"item": [
+				{
+					"name": "Login Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.collectionVariables.set('jwt_token', response.token);",
+									"    pm.test('Login successful', function () {",
+									"        pm.expect(response.message).to.eql('Login exitoso');",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@checklist.com\",\n    \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/users/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"login"
+							]
+						},
+						"description": "Login como administrador del sistema"
+					}
+				},
+				{
+					"name": "Login Supervisor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.collectionVariables.set('jwt_token', response.token);",
+									"    pm.test('Login successful', function () {",
+									"        pm.expect(response.message).to.eql('Login exitoso');",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"supervisor@ort.edu.ar\",\n    \"password\": \"super123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/users/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"login"
+							]
+						},
+						"description": "Login como supervisor (puede crear checklists y asignaciones)"
+					}
+				},
+				{
+					"name": "Login Colaborador (Nestor)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.collectionVariables.set('jwt_token', response.token);",
+									"    pm.test('Login successful', function () {",
+									"        pm.expect(response.message).to.eql('Login exitoso');",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"Nestor.Wilke@ejemplo.com\",\n    \"password\": \"pass123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/users/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"login"
+							]
+						},
+						"description": "Login como colaborador Nestor Wilke"
+					}
+				},
+				{
+					"name": "Register New User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"Nuevo Usuario\",\n    \"email\": \"nuevo@ejemplo.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/users/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"register"
+							]
+						},
+						"description": "Registrar un nuevo usuario (rol colaborador por defecto)"
+					}
+				}
+			],
+			"description": "Endpoints de autenticación y registro"
+		},
+		{
+			"name": "👥 Users",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						},
+						"description": "Obtener todos los usuarios (requiere autenticación)"
+					}
+				},
+				{
+					"name": "Get User by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/users/USER_ID_HERE",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"USER_ID_HERE"
+							]
+						},
+						"description": "Obtener un usuario específico por ID"
+					}
+				}
+			],
+			"description": "Gestión de usuarios"
+		},
+		{
+			"name": "📋 Checklists",
+			"item": [
+				{
+					"name": "Get All Checklists",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/checklists",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"checklists"
+							]
+						},
+						"description": "Obtener todos los checklists disponibles"
+					}
+				},
+				{
+					"name": "Get Checklist by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/checklists/CHECKLIST_ID_HERE",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"checklists",
+								"CHECKLIST_ID_HERE"
+							]
+						},
+						"description": "Obtener un checklist específico por ID"
+					}
+				},
+				{
+					"name": "Create Checklist (Supervisor Only)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Nuevo Checklist de Prueba\",\n    \"description\": \"Checklist creado desde Postman para pruebas\",\n    \"category\": \"testing\",\n    \"slug\": \"nuevo-checklist-prueba\",\n    \"items\": [\n        {\n            \"id\": \"1\",\n            \"text\": \"Verificar conexión de red\",\n            \"type\": \"select\",\n            \"options\": [\"Conectado\", \"Desconectado\"],\n            \"required\": true\n        },\n        {\n            \"id\": \"2\",\n            \"text\": \"Medir velocidad de conexión\",\n            \"type\": \"number\",\n            \"unit\": \"Mbps\",\n            \"required\": true,\n            \"validation\": {\n                \"min\": 0,\n                \"max\": 1000\n            }\n        },\n        {\n            \"id\": \"3\",\n            \"text\": \"Observaciones adicionales\",\n            \"type\": \"text\",\n            \"required\": false,\n            \"validation\": {\n                \"max_length\": 500\n            }\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/checklists",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"checklists"
+							]
+						},
+						"description": "Crear un nuevo checklist (solo supervisores y admins)"
+					}
+				},
+				{
+					"name": "Update Checklist (Supervisor Only)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Checklist Actualizado\",\n    \"description\": \"Descripción actualizada desde Postman\",\n    \"category\": \"updated\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/checklists/CHECKLIST_ID_HERE",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"checklists",
+								"CHECKLIST_ID_HERE"
+							]
+						},
+						"description": "Actualizar un checklist existente (solo supervisores y admins)"
+					}
+				}
+			],
+			"description": "Gestión de templates de checklists"
+		},
+		{
+			"name": "📝 Assignments",
+			"item": [
+				{
+					"name": "Get All Assignments",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/assignments",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"assignments"
+							]
+						},
+						"description": "Obtener todas las asignaciones"
+					}
+				},
+				{
+					"name": "Get Assignments by Collaborator",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/assignments?collaboratorEmail=Nestor.Wilke@ejemplo.com",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"assignments"
+							],
+							"query": [
+								{
+									"key": "collaboratorEmail",
+									"value": "Nestor.Wilke@ejemplo.com"
+								}
+							]
+						},
+						"description": "Obtener asignaciones filtradas por colaborador"
+					}
+				},
+				{
+					"name": "Get Assignment by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/assignments/ASSIGNMENT_ID_HERE",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"assignments",
+								"ASSIGNMENT_ID_HERE"
+							]
+						},
+						"description": "Obtener una asignación específica por ID"
+					}
+				},
+				{
+					"name": "Create Assignment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"checklistId\": \"CHECKLIST_ID_HERE\",\n    \"collaboratorEmail\": \"Diego.Siciliani@ejemplo.com\",\n    \"dueDate\": \"2024-12-01T10:00:00.000Z\",\n    \"priority\": \"high\",\n    \"notes\": \"Asignación creada desde Postman para pruebas\",\n    \"checklistSlug\": \"inspeccion-de-seguridad\",\n    \"checklistTitle\": \"Inspección de seguridad en área de pozo\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/assignments",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"assignments"
+							]
+						},
+						"description": "Crear una nueva asignación"
+					}
+				},
+				{
+					"name": "Update Assignment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"in_progress\",\n    \"notes\": \"Asignación actualizada - en progreso\",\n    \"priority\": \"medium\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/assignments/ASSIGNMENT_ID_HERE",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"assignments",
+								"ASSIGNMENT_ID_HERE"
+							]
+						},
+						"description": "Actualizar una asignación existente"
+					}
+				}
+			],
+			"description": "Gestión de asignaciones de checklists"
+		},
+		{
+			"name": "✅ Executions",
+			"item": [
+				{
+					"name": "Get All Executions",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/executions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"executions"
+							]
+						},
+						"description": "Obtener todas las ejecuciones"
+					}
+				},
+				{
+					"name": "Get Executions by Assignment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/executions?assignmentId=ASSIGNMENT_ID_HERE",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"executions"
+							],
+							"query": [
+								{
+									"key": "assignmentId",
+									"value": "ASSIGNMENT_ID_HERE"
+								}
+							]
+						},
+						"description": "Obtener ejecuciones filtradas por asignación"
+					}
+				},
+				{
+					"name": "Get Execution by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/executions/EXECUTION_ID_HERE",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"executions",
+								"EXECUTION_ID_HERE"
+							]
+						},
+						"description": "Obtener una ejecución específica por ID"
+					}
+				},
+				{
+					"name": "Create Execution",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"assignmentId\": \"ASSIGNMENT_ID_HERE\",\n    \"checklistTitle\": \"Inspección de seguridad en área de pozo\",\n    \"responses\": {\n        \"1\": {\n            \"value\": \"Correcta\",\n            \"valid\": true,\n            \"visible\": true,\n            \"completedAt\": \"2024-11-04T02:00:00.000Z\"\n        },\n        \"2\": {\n            \"value\": \"Cumple\",\n            \"valid\": true,\n            \"visible\": true,\n            \"completedAt\": \"2024-11-04T02:01:00.000Z\"\n        }\n    }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/executions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"executions"
+							]
+						},
+						"description": "Crear una nueva ejecución (iniciar checklist)"
+					}
+				},
+				{
+					"name": "Update Execution (Save Progress)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"responses\": {\n        \"1\": {\n            \"value\": \"Correcta\",\n            \"valid\": true,\n            \"visible\": true,\n            \"completedAt\": \"2024-11-04T02:00:00.000Z\"\n        },\n        \"2\": {\n            \"value\": \"Cumple\",\n            \"valid\": true,\n            \"visible\": true,\n            \"completedAt\": \"2024-11-04T02:01:00.000Z\"\n        },\n        \"4\": {\n            \"value\": \"Seguro\",\n            \"valid\": true,\n            \"visible\": true,\n            \"completedAt\": \"2024-11-04T02:02:00.000Z\"\n        }\n    }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/executions/EXECUTION_ID_HERE",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"executions",
+								"EXECUTION_ID_HERE"
+							]
+						},
+						"description": "Actualizar una ejecución (guardar progreso)"
+					}
+				},
+				{
+					"name": "Complete Execution",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"responses\": {\n        \"1\": {\n            \"value\": \"Correcta\",\n            \"valid\": true,\n            \"visible\": true,\n            \"completedAt\": \"2024-11-04T02:00:00.000Z\"\n        },\n        \"2\": {\n            \"value\": \"Cumple\",\n            \"valid\": true,\n            \"visible\": true,\n            \"completedAt\": \"2024-11-04T02:01:00.000Z\"\n        },\n        \"4\": {\n            \"value\": \"Seguro\",\n            \"valid\": true,\n            \"visible\": true,\n            \"completedAt\": \"2024-11-04T02:02:00.000Z\"\n        },\n        \"5\": {\n            \"value\": \"2024-10-15\",\n            \"valid\": true,\n            \"visible\": true,\n            \"completedAt\": \"2024-11-04T02:03:00.000Z\"\n        }\n    },\n    \"completionNotes\": \"Inspección completada sin anomalías detectadas\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/executions/EXECUTION_ID_HERE/complete",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"executions",
+								"EXECUTION_ID_HERE",
+								"complete"
+							]
+						},
+						"description": "Completar una ejecución (finalizar checklist)"
+					}
+				}
+			],
+			"description": "Gestión de ejecuciones de checklists"
+		},
+		{
+			"name": "🧪 Test Scenarios",
+			"item": [
+				{
+					"name": "Test Role-Based Access (Collaborator trying to create checklist)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Test Unauthorized\",\n    \"description\": \"Este request debería fallar con 403\",\n    \"category\": \"test\",\n    \"items\": [\n        {\n            \"id\": \"1\",\n            \"text\": \"Test item\",\n            \"type\": \"checkbox\",\n            \"required\": true\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/checklists",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"checklists"
+							]
+						},
+						"description": "Probar control de acceso - colaborador intentando crear checklist (debería fallar con 403)"
+					}
+				},
+				{
+					"name": "Test Invalid Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"invalid@example.com\",\n    \"password\": \"wrongpassword\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/users/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"login"
+							]
+						},
+						"description": "Probar login con credenciales inválidas (debería fallar con 401)"
+					}
+				},
+				{
+					"name": "Test Unauthorized Access (No Token)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/checklists",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"checklists"
+							]
+						},
+						"description": "Probar acceso sin token JWT (debería fallar con 401)"
+					}
+				}
+			],
+			"description": "Escenarios de prueba para validar seguridad y manejo de errores"
+		}
+	]
+}

@@ -20,7 +20,7 @@ export const loginUserController = async (req, res) => {
         const user = await loginUserService({ email, password });
         // Generar JWT
         const token = jwt.sign(
-            { _id: user._id, username: user.username, email: user.email },
+            { _id: user._id, username: user.username, email: user.email, role: user.role },
             process.env.JWT_SECRET,
             { expiresIn: "2h" }
         );

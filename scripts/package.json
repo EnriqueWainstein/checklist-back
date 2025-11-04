@@ -1,0 +1,14 @@
+{
+  "type": "module",
+  "name": "checklist-db-scripts",
+  "version": "1.0.0",
+  "description": "Scripts para inicialización de base de datos MongoDB",
+  "scripts": {
+    "init-db": "node init-db.js"
+  },
+  "dependencies": {
+    "mongodb": "^6.16.0",
+    "bcrypt": "^6.0.0",
+    "dotenv": "^16.5.0"
+  }
+}
