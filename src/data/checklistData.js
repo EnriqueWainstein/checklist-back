@@ -3,9 +3,12 @@ import { ObjectId } from "mongodb";
 
 const COLLECTION_NAME = "checklists";
 
-export async function getAllChecklists() {
+export async function getAllChecklists(filter = {}) {
     const db = getDb();
-    return await db.collection(COLLECTION_NAME).find({}).toArray();
+    const query = {};
+    if(filter.title) query.title = filter.title;
+    if(filter.category) query.category = filter.category;
+    return await db.collection(COLLECTION_NAME).find(query).toArray();
 }
 
 export async function getChecklistById(id) {
