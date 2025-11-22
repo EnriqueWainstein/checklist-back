@@ -1,4 +1,4 @@
-import {getUsers, getUserById, registerUserService, loginUserService} from "../services/userService.js";
+import {getUsers, getUserById, registerUserService, loginUserService, updateUserRoleService} from "../services/userService.js";
 import jwt from "jsonwebtoken";
 
 export const getAllUsers = async (req, res) => {
@@ -61,5 +61,19 @@ export const getUser = async (req, res) => {
     } catch (error) {
         console.log("Error fetching users: ", error);
         res.status(500).json({message: "Internal server error"});
+    }
+};
+
+export const updateRolUser = async (req, res) => {
+    const { role } = req.body;
+    const id = req.params.id;
+    if (!role) {
+        return res.status(400).json({ message: "Faltan campos obligatorios (role)" });
+    }
+    try {
+        const result = await updateUserRoleService({id, role});
+        res.status(201).json({ message: "Rol actualizado exitosamente", id: result._id });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 };
