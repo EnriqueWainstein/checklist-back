@@ -73,3 +73,16 @@ export async function getExecutionsByAssignment(assignmentId) {
         assignmentId: assignmentId 
     }).toArray();
 }
+
+export async function updateStatus(id, status) {
+    const db = getDb();
+    const result = await db.collection(COLLECTION_NAME).updateOne(
+        { _id: new ObjectId(id) },
+        { 
+            $set: { 
+                status: status 
+            } 
+        }
+    );
+    return result;
+}

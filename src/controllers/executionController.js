@@ -159,3 +159,37 @@ export async function completeExecution(req, res) {
         });
     }
 }
+
+export async function changeStatusExecution(req, res) {
+    try {
+        const { id } = req.params;
+        const {status} = req.body;
+        const updateData = {};
+        updateData.status = status;
+        
+        const result = await executionService.changeStatus(id, updateData);
+        
+        res.status(200).json({
+            success: true,
+            message: "Ejecución actualizada exitosamente"
+        });
+    } catch (error) {
+        console.error("Error al actualizar ejecución:", error);
+        
+        // Errores de validación y permisos
+        if (error.message.includes("no encontrada") || error.message.includes("permisos") ||
+            error.message.includes("completada") || error.message.includes("debe")) {
+            const statusCode = error.message.includes("permisos") ? 403 : 400;
+            return res.status(statusCode).json({
+                success: false,
+                message: error.message
+            });
+        }
+        
+        res.status(500).json({
+            success: false,
+            message: "Error interno del servidor",
+            error: error.message
+        });
+    }
+}

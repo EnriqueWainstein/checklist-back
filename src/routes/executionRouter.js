@@ -4,7 +4,8 @@ import {
     getExecutionById, 
     createExecution, 
     updateExecution,
-    completeExecution 
+    completeExecution, 
+    changeStatusExecution
 } from "../controllers/executionController.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 
@@ -27,5 +28,7 @@ router.put("/:id", updateExecution);
 
 // POST /api/executions/:id/complete - Completar una ejecución
 router.post("/:id/complete", completeExecution);
+
+router.patch("/:id", changeStatusExecution);
 
 export default router;
