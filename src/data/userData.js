@@ -47,8 +47,23 @@ export async function registerUser({ username, email, password }) {
         password: hashedPassword,
         role: "collaborator", // Rol por defecto para nuevos usuarios
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
+        avatar: null,
+        notification: []
     };
     const result = await db.collection("users").insertOne(newUser);
+    return result;
+}
+
+export async function updateRole(id, role) {
+    const db = getDb();
+    const result = await db.collection("users").updateOne(
+        { _id: new ObjectId(id) },
+        { 
+            $set: { 
+                role: role 
+            } 
+        }
+    );
     return result;
 }

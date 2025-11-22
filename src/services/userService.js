@@ -1,4 +1,4 @@
-import { findAllUsers, findUserById, registerUser, findByCredentials } from "../data/userData.js";
+import { findAllUsers, findUserById, registerUser, findByCredentials, updateRole } from "../data/userData.js";
 
 export const getUsers = async () => {
     return await findAllUsers();
@@ -28,4 +28,18 @@ export const loginUserService = async ({ email, password }) => {
     // No devolver password
     const { password: _pw, ...userWithoutPassword } = user;
     return userWithoutPassword;
+}
+
+export const updateUserRoleService = async ({ id, role }) => {
+    const user = await findUserById(id);
+    console.log(id);
+    console.log(role);
+    if (!user) {
+        throw new Error("No se encontro el usuario");
+    }
+    if(!["collaborator", "supervisor"].includes(role)){
+        throw new Error('Rol invalido');
+    }
+    // No devolver password
+    return await updateRole(id, role);
 }
