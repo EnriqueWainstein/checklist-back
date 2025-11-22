@@ -32,8 +32,6 @@ export const loginUserService = async ({ email, password }) => {
 
 export const updateUserRoleService = async ({ id, role }) => {
     const user = await findUserById(id);
-    console.log(id);
-    console.log(role);
     if (!user) {
         throw new Error("No se encontro el usuario");
     }
@@ -42,4 +40,12 @@ export const updateUserRoleService = async ({ id, role }) => {
     }
     // No devolver password
     return await updateRole(id, role);
+}
+
+export const getNotifications = async ({ id }) => {
+    const user = await findUserById(id);
+    if (!user) {
+        throw new Error("No se encontro el usuario");
+    }
+    return user.notifications;
 }

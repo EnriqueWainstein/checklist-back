@@ -1,5 +1,6 @@
 import * as assignmentData from "../data/assignmentData.js";
 import * as checklistData from "../data/checklistData.js";
+import * as userData from "../data/userData.js";
 
 export const getAllAssignments = async (filters = {}) => {
     try {
@@ -35,6 +36,14 @@ export const createAssignment = async (assignmentInfo, assignedBy) => {
         }
 
         // Verificar que el checklist existe
+        const users = await userData.findAllUsers();
+        const collaborator = users.filter((collaborator) => {
+            return collaborator.email === assignmentInfo.collaboratorEmail && collaborator.username === assignmentInfo.collaboratorName;
+        });
+        if(collaborator.length !== 1){
+            throw new Error('Más de un colaborador con el mismo email y nombre o no se encontro colaborador');
+        }
+        const notificarA = collaborator[0];
         const checklist = await checklistData.getChecklistById(assignmentInfo.checklistId);
         if (!checklist) {
             throw new Error("Checklist no encontrado");
@@ -69,7 +78,14 @@ export const createAssignment = async (assignmentInfo, assignedBy) => {
             assignedBy: assignedBy
         };
 
-        return await assignmentData.createAssignment(assignmentData_new);
+        const result = await assignmentData.createAssignment(assignmentData_new);
+        await userData.createNotification(notificarA._id, {
+            assigmentTitle: assignmentInfo.title,
+            checklist: checklist.title,
+            assigmentDescription: assignmentInfo.description || "",
+            assigmentBy: assignedBy,
+        });
+        return result;
     } catch (error) {
         throw error;
     }
