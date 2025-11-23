@@ -1,4 +1,4 @@
-import {getUsers, getUserById, registerUserService, loginUserService, updateUserRoleService} from "../services/userService.js";
+import {getUsers, getUserById, registerUserService, loginUserService, updateUserRoleService, getNotifications, deleteNotificationsService, updateAvatarService} from "../services/userService.js";
 import jwt from "jsonwebtoken";
 
 export const getAllUsers = async (req, res) => {
@@ -73,6 +73,38 @@ export const updateRolUser = async (req, res) => {
     try {
         const result = await updateUserRoleService({id, role});
         res.status(201).json({ message: "Rol actualizado exitosamente", id: result._id });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const getNotificationsController = async (req, res) => {
+    const id = req.params.id;
+    try {
+        const result = await getNotifications({id});
+        res.status(201).json({ data: result });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const deleteNotificationsController = async (req, res) => {
+    const id = req.params.id;
+    try {
+        const ids = req.body.ids;
+        const result = await deleteNotificationsService({ids, id});
+        res.status(201).json({ data: result });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const updateAvatarController = async (req, res) => {
+    const id = req.params.id;
+    try {
+        const img = req.body.img;
+        const result = await updateAvatarService({id, img});
+        res.status(201).json({ data: result });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

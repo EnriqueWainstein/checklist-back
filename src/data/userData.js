@@ -1,5 +1,5 @@
 import { getDb } from "./connection.js";
-import { ObjectId } from "mongodb";
+import { ObjectId, UUID } from "mongodb";
 import bcrypt from "bcrypt";
 
 export async function findAllUsers() {
@@ -62,6 +62,57 @@ export async function updateRole(id, role) {
         { 
             $set: { 
                 role: role 
+            } 
+        }
+    );
+    return result;
+}
+
+export async function createNotification (id, data) {
+    const nuevaNotificacion = { 
+        id: crypto.randomUUID(),
+        assigmentTitle: data.assigmentTitle,
+        checklist: data.checklist,
+        assigmentDescription: data.assigmentDescription,
+        assigmentBy: data.assigmentBy,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+    }
+    const db = getDb();
+    const result = await db.collection("users").updateOne(
+        { _id: new ObjectId(id) },
+        { 
+            $push: { 
+                notification: nuevaNotificacion 
+            } 
+        }
+    );
+    return result;
+}
+
+export async function deleteNotifications (ids, id) {
+    const db = getDb();
+    const result = await collection.updateOne(
+        { _id: new ObjectId(id) },
+        {
+            $pull: {
+            notificaciones: {
+                id: { $in: ids }  // ← elimina las notificaciones cuyo campo id esté en el array recibido
+            }
+            }
+        }
+    );
+
+    return result;
+}
+
+export async function updateAvatar(id, img) {
+    const db = getDb();
+    const result = await db.collection("users").updateOne(
+        { _id: new ObjectId(id) },
+        { 
+            $set: { 
+                avatar: img 
             } 
         }
     );
