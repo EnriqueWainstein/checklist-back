@@ -89,3 +89,32 @@ export async function createNotification (id, data) {
     );
     return result;
 }
+
+export async function deleteNotifications (ids, id) {
+    const db = getDb();
+    const result = await collection.updateOne(
+        { _id: new ObjectId(id) },
+        {
+            $pull: {
+            notificaciones: {
+                id: { $in: ids }  // ← elimina las notificaciones cuyo campo id esté en el array recibido
+            }
+            }
+        }
+    );
+
+    return result;
+}
+
+export async function updateAvatar(id, img) {
+    const db = getDb();
+    const result = await db.collection("users").updateOne(
+        { _id: new ObjectId(id) },
+        { 
+            $set: { 
+                avatar: img 
+            } 
+        }
+    );
+    return result;
+}

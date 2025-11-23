@@ -1,4 +1,4 @@
-import { findAllUsers, findUserById, registerUser, findByCredentials, updateRole } from "../data/userData.js";
+import { findAllUsers, findUserById, registerUser, findByCredentials, updateRole, deleteNotifications, updateAvatar } from "../data/userData.js";
 
 export const getUsers = async () => {
     return await findAllUsers();
@@ -48,4 +48,19 @@ export const getNotifications = async ({ id }) => {
         throw new Error("No se encontro el usuario");
     }
     return user.notifications;
+}
+
+export const deleteNotificationsService = async ({ ids=[], id }) => {
+    if(!ids || ids.length === 0){
+        throw new Error("Es requerido el campo ids");
+    }
+    return await deleteNotifications(ids, id);
+}
+
+export const updateAvatarService = async ({ id, img='' }) => {
+    const user = await findUserById(id);
+    if (!user) {
+        throw new Error("No se encontro el usuario");
+    }
+    return await updateAvatar(id, img);
 }
