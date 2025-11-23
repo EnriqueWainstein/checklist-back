@@ -190,6 +190,5 @@ export const changeStatus = async (id, update) => {
     if (!["in_progress", "completed", "reviewed"].includes(update.status)) {
         throw new Error("Status no valido");
     }
-    console.log(update.status);
     return await executionData.updateStatus(id, update.status);
 }

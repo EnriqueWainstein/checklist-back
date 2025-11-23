@@ -100,12 +100,13 @@ export const deleteNotificationsController = async (req, res) => {
 };
 
 export const updateAvatarController = async (req, res) => {
+    const { img } = req.body;
     const id = req.params.id;
     try {
-        const img = req.body.img;
         const result = await updateAvatarService({id, img});
         res.status(201).json({ data: result });
     } catch (error) {
+        console.log(error);
         res.status(500).json({ message: error.message });
     }
 };

@@ -7,9 +7,9 @@ router.post("/register", registerUserController);
 router.post("/login", loginUserController);
 router.get("/", authMiddleware, getAllUsers);
 router.get("/:id/notifications", authMiddleware, getNotificationsController);
-router.put('/role/:id', authMiddleware, updateRolUser);
-router.get("/:id", authMiddleware, getUser);
 router.delete("/:id/notifications", authMiddleware, deleteNotificationsController);
 router.post("/:id/avatar", authMiddleware, updateAvatarController);
+router.put('/role/:id', authMiddleware, updateRolUser);
+router.get("/:id", authMiddleware, getUser);
 
 export default router;

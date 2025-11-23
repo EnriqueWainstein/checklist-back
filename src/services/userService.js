@@ -47,14 +47,15 @@ export const getNotifications = async ({ id }) => {
     if (!user) {
         throw new Error("No se encontro el usuario");
     }
-    return user.notifications;
+    return user.notification;
 }
 
 export const deleteNotificationsService = async ({ ids=[], id }) => {
     if(!ids || ids.length === 0){
         throw new Error("Es requerido el campo ids");
     }
-    return await deleteNotifications(ids, id);
+    await deleteNotifications(ids, id);
+    return await findUserById(id);
 }
 
 export const updateAvatarService = async ({ id, img='' }) => {
@@ -62,5 +63,6 @@ export const updateAvatarService = async ({ id, img='' }) => {
     if (!user) {
         throw new Error("No se encontro el usuario");
     }
-    return await updateAvatar(id, img);
+    await updateAvatar(id, img);
+    return await findUserById(id);
 }
