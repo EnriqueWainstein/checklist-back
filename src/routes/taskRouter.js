@@ -10,10 +10,10 @@ router.use(authMiddleware);
 
 router.get("/", getAllTasks);
 
-router.post("/", createTask);
+router.post("/", requireSupervisor, createTask);
 
-router.patch("/:id", updateTask);
+router.patch("/:id", requireSupervisor, updateTask);
 
-router.delete("/:id", deleteTask);
+router.delete("/:id", requireSupervisor, deleteTask);
 
 export default router;
