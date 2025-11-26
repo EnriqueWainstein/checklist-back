@@ -1,10 +1,7 @@
 import express from "express";
-import { 
-    getAllTasks
-} from "../controllers/taskController.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 import { requireSupervisor, requireAdmin } from "../middleware/roleMiddleware.js";
-import { createTask, deleteTask, updateTask } from "../controllers/taskController.js";
+import { createTask, deleteTask, updateTask, getAllTasks } from "../controllers/taskController.js";
 
 const router = express.Router();
 

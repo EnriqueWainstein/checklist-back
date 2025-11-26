@@ -31,3 +31,12 @@ export async function updateTask(id, updateData) {
         }
     );
 }
+
+export async function getAllTasks() {
+    const db = getDb();
+    return await db.collection(COLLECTION_NAME)
+        .find({})
+        .sort({ createdAt: -1 })
+        .toArray();
+}
+
