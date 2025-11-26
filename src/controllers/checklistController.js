@@ -127,7 +127,7 @@ export async function deleteChecklist(req, res) {
         
         res.status(200).json({
             success: true,
-            message: "Checklist actualizado exitosamente"
+            message: "Checklist eliminado exitosamente"
         });
     } catch (error) {
         console.error("Error al actualizar checklist:", error);

@@ -47,7 +47,7 @@ export const getNotifications = async ({ id }) => {
     if (!user) {
         throw new Error("No se encontro el usuario");
     }
-    return user.notification;
+    return user.notification || [];
 }
 
 export const deleteNotificationsService = async ({ ids=[], id }) => {
